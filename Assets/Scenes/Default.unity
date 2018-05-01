@@ -1084,6 +1084,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 186230006}
+  waypoints:
+  - {fileID: 607647673}
+  - {fileID: 523414203}
+  - {fileID: 770199008}
+  - {fileID: 889703003}
+  - {fileID: 1228820500}
+  - {fileID: 1296038652}
 --- !u!195 &1848221558
 NavMeshAgent:
   m_ObjectHideFlags: 0

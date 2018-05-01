@@ -4,45 +4,51 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class BPatrolling : StateMachineBehaviour {
-	GameObject unit;
-	NavMeshAgent agent;
-	GameObject [] waypoints;
-	int currentWaypoint;
+	GameObject unit;				// the unit the this behaviour is attached to
+	NavMeshAgent navMeshAgent;		// to handle movement
+	GameObject [] waypoints;		// list of patrol points
+	int currentWaypoint = 0;		// current waypoint index
+	float stoppingDistance = 0.1f;	// accepted distance before moving to the next waypoint
 
-	void Awake(){
-		waypoints = GameObject.FindGameObjectsWithTag ("waypoint");
-	}
-
-	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+	// OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		Debug.Log ("Patrolling entered");
+		// get the waypoints
 		unit = animator.gameObject;
-		agent = unit.GetComponent<NavMeshAgent> ();
-		currentWaypoint = 0;
+		AI unitAI = unit.GetComponent<AI> ();
+		if (!unitAI)	// no AI component
+			return;
+		waypoints = unitAI.waypoints;
+
+		// get the movement component
+		navMeshAgent = unit.GetComponent<NavMeshAgent> ();
+
+		if ((waypoints == null) || (waypoints.Length == 0))	// no waypoints (length = 0 or no AI) 
+			return;
+
+		if (!navMeshAgent)	// no movement component
+			return;
+
+		// set unit to move to the first waypoint
+		navMeshAgent.stoppingDistance = stoppingDistance;
+		navMeshAgent.SetDestination (waypoints [currentWaypoint % waypoints.Length].transform.position);
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		Debug.Log ("Patrolling updated");
-		if (waypoints.Length == 0)
+		if ((waypoints == null) || (waypoints.Length == 0))	// no waypoints (length = 0 or no AI) 
 			return;
 
-		if (Vector3.Distance (waypoints [currentWaypoint].transform.position, unit.transform.position) < 1.0f) {
+		if (!navMeshAgent)	// no movement component
+			return;
+
+		if ((navMeshAgent.remainingDistance <= stoppingDistance) && !navMeshAgent.pathPending) { // has reached the current waypoint
+			navMeshAgent.stoppingDistance = stoppingDistance;
 			currentWaypoint++;
-			if (currentWaypoint >= waypoints.Length)
-				currentWaypoint = 0;
+			navMeshAgent.SetDestination (waypoints [currentWaypoint % waypoints.Length].transform.position);
 		}
-
-		agent.SetDestination (waypoints [currentWaypoint].transform.position);
-
-		// rotate towards target
-		//Vector3 direction = waypoints[currentWaypoint].transform.position - unit.transform.position;
-		//unit.transform.rotation = Quaternion.Slerp (unit.transform.rotation, Quaternion.LookRotation (direction), 1.0f * Time.deltaTime);
-		//unit.transform.Translate (0, 0, Time.deltaTime * 2.0f);
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		Debug.Log ("Patrolling exited");
 	}
 }

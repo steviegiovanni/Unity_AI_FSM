@@ -6,6 +6,8 @@ public class AI : MonoBehaviour {
 	Animator anim;
 	public GameObject player;
 
+	public GameObject [] waypoints;
+
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator> ();
