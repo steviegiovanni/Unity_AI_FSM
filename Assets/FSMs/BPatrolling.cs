@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BPatrolling : StateMachineBehaviour {
 	GameObject unit;
+	NavMeshAgent agent;
 	GameObject [] waypoints;
 	int currentWaypoint;
 
@@ -15,6 +17,7 @@ public class BPatrolling : StateMachineBehaviour {
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		Debug.Log ("Patrolling entered");
 		unit = animator.gameObject;
+		agent = unit.GetComponent<NavMeshAgent> ();
 		currentWaypoint = 0;
 	}
 
@@ -30,10 +33,12 @@ public class BPatrolling : StateMachineBehaviour {
 				currentWaypoint = 0;
 		}
 
+		agent.SetDestination (waypoints [currentWaypoint].transform.position);
+
 		// rotate towards target
-		Vector3 direction = waypoints[currentWaypoint].transform.position - unit.transform.position;
-		unit.transform.rotation = Quaternion.Slerp (unit.transform.rotation, Quaternion.LookRotation (direction), 1.0f * Time.deltaTime);
-		unit.transform.Translate (0, 0, Time.deltaTime * 2.0f);
+		//Vector3 direction = waypoints[currentWaypoint].transform.position - unit.transform.position;
+		//unit.transform.rotation = Quaternion.Slerp (unit.transform.rotation, Quaternion.LookRotation (direction), 1.0f * Time.deltaTime);
+		//unit.transform.Translate (0, 0, Time.deltaTime * 2.0f);
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
