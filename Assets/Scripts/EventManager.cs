@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public class HashtableEvent : UnityEvent <Hashtable> {}
+
 public class EventManager : MonoBehaviour {
-	private Dictionary <string, UnityEvent<Hashtable>> eventDictionary;
+	private Dictionary <string, HashtableEvent> eventDictionary;
 	private static EventManager eventManager;
 
 	// getter, reminds to have one active eventamanager object in the scene
@@ -25,16 +27,16 @@ public class EventManager : MonoBehaviour {
 	// initialize dictionary of event
 	void Init(){
 		if (eventDictionary == null) 
-			eventDictionary = new Dictionary<string,UnityEvent<Hashtable>> ();
+			eventDictionary = new Dictionary<string,HashtableEvent> ();
 	}
 
 	// register a listener to the event manager
 	public static void StartListening(string eventName, UnityAction<Hashtable> listener){
-		UnityEvent<Hashtable> thisEvent = null;
+		HashtableEvent thisEvent = null;
 		if (instance.eventDictionary.TryGetValue (eventName, out thisEvent))
 			thisEvent.AddListener (listener);
 		else {
-			thisEvent = new UnityEvent<Hashtable> ();
+			thisEvent = new HashtableEvent ();
 			thisEvent.AddListener (listener);
 			instance.eventDictionary.Add (eventName, thisEvent);
 		}
@@ -44,15 +46,15 @@ public class EventManager : MonoBehaviour {
 	public static void StopListening (string eventName, UnityAction<Hashtable> listener){
 		if (eventManager == null)
 			return;
-		UnityEvent thisEvent = null;
+		HashtableEvent thisEvent = null;
 		if(instance.eventDictionary.TryGetValue(eventName,out thisEvent))
 			thisEvent.RemoveListener(listener);
 	}
 
 	// call to trigger the event
-	public static void TriggerEvent(string eventName){
-		UnityEvent<Hashtable> thisEvent = null;
+	public static void TriggerEvent(string eventName, Hashtable eventParams = default(Hashtable)){
+		HashtableEvent thisEvent = null;
 		if (instance.eventDictionary.TryGetValue (eventName, out thisEvent))
-			thisEvent.Invoke ();
+			thisEvent.Invoke (eventParams);
 	}
 }
