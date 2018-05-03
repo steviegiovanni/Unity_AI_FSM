@@ -17,6 +17,8 @@ public class EventManager : MonoBehaviour {
 				 else 
 					eventManager.Init ();
 			}
+
+			return eventManager;
 		}
 	}
 
