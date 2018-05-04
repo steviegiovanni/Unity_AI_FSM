@@ -5,8 +5,10 @@ using UnityEngine;
 public class Perception : MonoBehaviour {
 	public float radius;
 	public bool alerted = false;
+	public Dictionary<GameObject,Vector3> percepts;
 
 	void OnEnable(){
+		percepts = new Dictionary<GameObject,Vector3> ();
 		EventManager.StartListening ("PERCEPTION", Perceived);
 	}
 
@@ -21,10 +23,22 @@ public class Perception : MonoBehaviour {
 		GameObject perceivedObject = (GameObject)(param ["OBJECT"]);
 		if (perceivedObject == this.gameObject)
 			return;
+
 		Vector3 position = perceivedObject.transform.position;
-		if (Vector3.SqrMagnitude (position - this.transform.position) <= radius * radius)
-			alerted = true;
-		else
-			alerted = false;
+		Vector3 prevPos;
+		if (percepts.TryGetValue (perceivedObject, out prevPos)) {
+			if (Vector3.SqrMagnitude (position - this.transform.position) <= radius * radius)
+				percepts [perceivedObject] = position;
+			else 
+				percepts.Remove (perceivedObject);
+		}else {
+			if (Vector3.SqrMagnitude (position - this.transform.position) <= radius * radius)
+				percepts.Add (perceivedObject, position);
+		}
+
+		//if (Vector3.SqrMagnitude (position - this.transform.position) <= radius * radius)
+		//	alerted = true;
+		//else
+		//	alerted = false;
 	}
 }

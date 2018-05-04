@@ -10,15 +10,12 @@ public class BChasing : StateMachineBehaviour {
 
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		Debug.Log ("Chasing entered");
 		unit = animator.gameObject;
 		agent = unit.GetComponent<NavMeshAgent> ();
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		Debug.Log ("Chasing updated");
-
 		agent.SetDestination (opponent.transform.position);
 
 		//Vector3 direction = opponent.transform.position - unit.transform.position;
@@ -28,6 +25,5 @@ public class BChasing : StateMachineBehaviour {
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		Debug.Log ("Chasing exited");
 	}
 }

@@ -20,7 +20,11 @@ public class AI : MonoBehaviour {
 	void Update () {
 		Perception perception = GetComponent<Perception> ();
 		if (perception) {
-			anim.SetBool ("alerted", perception.alerted);
+			Dictionary<GameObject,Vector3> percepts = perception.percepts;
+			if (percepts.Count == 0)
+				anim.SetBool ("alerted", false);
+			else 
+				anim.SetBool ("alerted", true);	
 		}
 
 		anim.SetFloat ("distance", Vector3.Distance(transform.position, player.transform.position));
