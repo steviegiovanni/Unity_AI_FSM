@@ -14,6 +14,6 @@ public class Unit : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// trigger perception event to send position every time the unit moves
-		EventManager.TriggerEvent ("PERCEPTION", new Hashtable (){{"NAME",this.gameObject.name},{"POSITION", transform.position}});
+		EventManager.TriggerEvent ("PERCEPTION", new Hashtable (){{"OBJECT", this.gameObject}});
 	}
 }

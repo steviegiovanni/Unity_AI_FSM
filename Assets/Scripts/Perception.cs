@@ -15,16 +15,13 @@ public class Perception : MonoBehaviour {
 	}
 
 	void Perceived(Hashtable param){
-		if (!param.ContainsKey ("NAME"))
-			return;
-		if (!param.ContainsKey ("POSITION"))
+		if (!param.ContainsKey ("OBJECT"))
 			return;
 
-		string name = (string)(param ["NAME"]);
-		if (name == this.gameObject.name)
+		GameObject perceivedObject = (GameObject)(param ["OBJECT"]);
+		if (perceivedObject == this.gameObject)
 			return;
-		
-		Vector3 position = (Vector3)(param ["POSITION"]);
+		Vector3 position = perceivedObject.transform.position;
 		if (Vector3.SqrMagnitude (position - this.transform.position) <= radius * radius)
 			alerted = true;
 		else
