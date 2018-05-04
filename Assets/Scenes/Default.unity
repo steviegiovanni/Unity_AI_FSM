@@ -189,6 +189,7 @@ GameObject:
   - component: {fileID: 186230009}
   - component: {fileID: 186230008}
   - component: {fileID: 186230007}
+  - component: {fileID: 186230011}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -262,6 +263,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &186230011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 186230006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49696219f1150c948b3e145463c6cd11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &414316805
 GameObject:
   m_ObjectHideFlags: 0
@@ -461,6 +473,46 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 523414203}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &594165671
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 594165673}
+  - component: {fileID: 594165672}
+  m_Layer: 0
+  m_Name: EventManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &594165672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 594165671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69b9612e4a914784f9bcf7e34bdac54a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &594165673
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 594165671}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &607647673
 GameObject:
   m_ObjectHideFlags: 0
@@ -981,8 +1033,10 @@ GameObject:
   - component: {fileID: 1848221556}
   - component: {fileID: 1848221557}
   - component: {fileID: 1848221558}
+  - component: {fileID: 1848221559}
+  - component: {fileID: 1848221560}
   m_Layer: 0
-  m_Name: Unit
+  m_Name: NPC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1112,3 +1166,27 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1848221559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1848221551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49696219f1150c948b3e145463c6cd11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1848221560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1848221551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 654d20d3b03d5f743972f00cc92a77eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 20
+  alerted: 0
