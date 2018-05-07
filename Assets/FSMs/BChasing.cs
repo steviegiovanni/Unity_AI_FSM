@@ -16,7 +16,7 @@ public class BChasing : StateMachineBehaviour {
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		agent.SetDestination (opponent.transform.position);
+		//agent.SetDestination (opponent.transform.position);
 
 		//Vector3 direction = opponent.transform.position - unit.transform.position;
 		//unit.transform.rotation = Quaternion.Slerp (unit.transform.rotation, Quaternion.LookRotation (direction), 1.0f * Time.deltaTime);

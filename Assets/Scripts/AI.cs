@@ -18,15 +18,22 @@ public class AI : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		// get percepts if object has perception component 
 		Perception perception = GetComponent<Perception> ();
 		if (perception) {
 			Dictionary<GameObject,Vector3> percepts = perception.percepts;
+
+			// update threat table if object has a threat table
+			ThreatTable threatTable = GetComponent<ThreatTable> ();
+			if (threatTable) 
+				threatTable.ProcessPercepts (percepts);
+
 			if (percepts.Count == 0)
 				anim.SetBool ("alerted", false);
 			else 
 				anim.SetBool ("alerted", true);	
 		}
 
-		anim.SetFloat ("distance", Vector3.Distance(transform.position, player.transform.position));
+		//anim.SetFloat ("distance", Vector3.Distance(transform.position, player.transform.position));
 	}
 }

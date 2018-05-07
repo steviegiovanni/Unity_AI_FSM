@@ -10,12 +10,15 @@ public class Perception : MonoBehaviour {
 	void OnEnable(){
 		percepts = new Dictionary<GameObject,Vector3> ();
 		EventManager.StartListening ("PERCEPTION", Perceived);
+		EventManager.StartListening ("DESTROY", PerceptDestroyed);
 	}
 
 	void OnDisable(){
 		EventManager.StopListening ("PERCEPTION", Perceived);
+		EventManager.StopListening ("DESTROY", PerceptDestroyed);
 	}
 
+	// percept is detected
 	void Perceived(Hashtable param){
 		if (!param.ContainsKey ("OBJECT"))
 			return;
@@ -35,10 +38,16 @@ public class Perception : MonoBehaviour {
 			if (Vector3.SqrMagnitude (position - this.transform.position) <= radius * radius)
 				percepts.Add (perceivedObject, position);
 		}
+	}
 
-		//if (Vector3.SqrMagnitude (position - this.transform.position) <= radius * radius)
-		//	alerted = true;
-		//else
-		//	alerted = false;
+	// remove percept from percepts if the object is destroyed
+	void PerceptDestroyed(Hashtable param){
+		if (!param.ContainsKey ("OBJECT"))
+			return;
+
+		GameObject destroyedPercept = (GameObject)(param ["OBJECT"]);
+		Vector3 pos;
+		if(percepts.TryGetValue(destroyedPercept, out pos))
+			percepts.Remove (destroyedPercept);
 	}
 }
