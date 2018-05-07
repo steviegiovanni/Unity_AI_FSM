@@ -5,22 +5,25 @@ using UnityEngine.AI;
 
 public class BChasing : StateMachineBehaviour {
 	public GameObject unit;
-	NavMeshAgent agent;
-	public GameObject opponent;
+	NavMeshAgent navMeshAgent;
+	Attack attackComponent;
 
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		unit = animator.gameObject;
-		agent = unit.GetComponent<NavMeshAgent> ();
+		navMeshAgent = unit.GetComponent<NavMeshAgent> ();
+		attackComponent = unit.GetComponent<Attack> ();
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		//agent.SetDestination (opponent.transform.position);
-
-		//Vector3 direction = opponent.transform.position - unit.transform.position;
-		//unit.transform.rotation = Quaternion.Slerp (unit.transform.rotation, Quaternion.LookRotation (direction), 1.0f * Time.deltaTime);
-		//unit.transform.Translate (0, 0, Time.deltaTime * 2.0f);
+		if (attackComponent) {
+			GameObject target = attackComponent.target;
+			if (target) {
+				navMeshAgent.stoppingDistance = attackComponent.range;
+				navMeshAgent.SetDestination (target.transform.position);
+			}
+		}
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state

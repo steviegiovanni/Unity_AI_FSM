@@ -13,6 +13,7 @@ public class Unit : MonoBehaviour {
 
 	void OnDisable(){
 		// call event DESTROY to do cleanup of any reference to this object before destroying it
-		EventManager.TriggerEvent ("DESTROY", new Hashtable (){ { "OBJECT", this.gameObject } });
+		if(EventManager.instance)
+			EventManager.TriggerEvent ("DESTROY", new Hashtable (){ { "OBJECT", this.gameObject } });
 	}
 }

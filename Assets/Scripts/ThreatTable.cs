@@ -44,4 +44,24 @@ public class ThreatTable : MonoBehaviour {
 		if(threats.TryGetValue(destroyedThreat, out threat))
 			threats.Remove (destroyedThreat);
 	}
+
+	// get object with highest threat
+	public GameObject GetHighestThreat(){
+		GameObject highestThreatObject = null;
+		float maxDistance = 999.0f;
+		int highestThreat = 0;
+
+		foreach (GameObject key in threats.Keys) {
+			if (key) {
+				float sqrDistance = Vector3.SqrMagnitude (key.transform.position - this.transform.position);
+				if ((highestThreat <= threats [key]) && (sqrDistance <= maxDistance)) {
+					maxDistance = sqrDistance;
+					highestThreat = threats [key];
+					highestThreatObject = key;
+				}
+			}
+		}
+
+		return highestThreatObject;
+	}
 }
