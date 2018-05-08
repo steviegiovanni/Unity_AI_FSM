@@ -17,8 +17,12 @@ public class BChasing : StateMachineBehaviour {
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+		AI unitAI = unit.GetComponent<AI> ();
+		if (!unitAI)	// no AI component
+			return;
+		
 		if (attackComponent) {
-			GameObject target = attackComponent.target;
+			GameObject target = unitAI.target;
 			if (target) {
 				navMeshAgent.stoppingDistance = attackComponent.range;
 				navMeshAgent.SetDestination (target.transform.position);

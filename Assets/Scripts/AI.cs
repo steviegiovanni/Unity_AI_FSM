@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 // every unit with behaviour needs to have this script
 
 public class AI : MonoBehaviour {
 	Animator anim;
 	public GameObject [] waypoints;
+	public GameObject target = null;
 
 	// Use this for initialization
 	void Start () {
@@ -20,22 +22,20 @@ public class AI : MonoBehaviour {
 		if (perception) {
 			Dictionary<GameObject,Vector3> percepts = perception.percepts;
 
-			if (percepts.Count == 0)
-				anim.SetBool ("alerted", false);
-			else 
-				anim.SetBool ("alerted", true);
-
 			// update threat table if object has a threat table
 			ThreatTable threatTable = GetComponent<ThreatTable> ();
 			if (threatTable) {
 				threatTable.ProcessPercepts (percepts);
-				GameObject highestThreatObject = threatTable.GetHighestThreat ();
+				target = threatTable.GetHighestThreat ();
+
+				if (target)
+					anim.SetBool ("alerted", true);
+				else 
+					anim.SetBool ("alerted", false);
 
 				Attack attackComponent = GetComponent<Attack> ();
-				if (attackComponent) {
-					attackComponent.target = highestThreatObject;
-					anim.SetBool ("reachable", attackComponent.IsTargetInrange ());
-				}
+				if (attackComponent)
+					anim.SetBool ("reachable", attackComponent.IsTargetInrange (target));
 			}
 		}
 
