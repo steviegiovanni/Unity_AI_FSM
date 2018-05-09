@@ -2,13 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Perception : MonoBehaviour {
+public class Perception : AIComponent {
 	public float radius;
-	public bool alerted = false;
 	public Dictionary<GameObject,Vector3> percepts;
 
-	void OnEnable(){
+	public void Start(){
+		base.Start ();
 		percepts = new Dictionary<GameObject,Vector3> ();
+	}
+
+	void Update(){
+		if (FSM)
+			FSM.SetBool ("perceiving", (percepts.Count != 0));
+	}
+
+	void OnEnable(){
 		EventManager.StartListening ("PERCEPTION", Perceived);
 		EventManager.StartListening ("DESTROY", PerceptDestroyed);
 	}
@@ -49,5 +57,22 @@ public class Perception : MonoBehaviour {
 		Vector3 pos;
 		if(percepts.TryGetValue(destroyedPercept, out pos))
 			percepts.Remove (destroyedPercept);
+	}
+
+	// return the nearest percept
+	public GameObject GetNearestPercept(){
+		GameObject nearest = null;
+		float maxDistance = 999.0f;
+		foreach (GameObject key in percepts.Keys) {
+			if (key) {
+				float sqrDistance = Vector3.SqrMagnitude (key.transform.position - this.transform.position);
+				if (sqrDistance <= maxDistance) {
+					maxDistance = sqrDistance;
+					nearest =  key;
+				}
+			}
+		}
+
+		return nearest;
 	}
 }

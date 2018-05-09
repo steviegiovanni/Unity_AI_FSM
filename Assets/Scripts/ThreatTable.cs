@@ -2,11 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThreatTable : MonoBehaviour {
+public class ThreatTable : AIComponent {
 	public Dictionary<GameObject, int> threats;
 
-	void OnEnable(){
+	public void Start(){
+		base.Start ();
 		threats = new Dictionary<GameObject,int> ();
+	}
+
+	void Update(){
+		if (FSM) {
+			Perception perception = GetComponent<Perception> ();
+			if (perception) {
+				ProcessPercepts (perception.percepts);
+				GameObject highestThreat = GetHighestThreat ();
+
+				if (highestThreat) {
+					BChasing chaseBehaviour = FSM.GetBehaviour<BChasing> ();
+					if (chaseBehaviour)
+						chaseBehaviour.target = highestThreat;
+					FSM.SetBool ("aggroed", true);
+				}else
+					FSM.SetBool ("aggroed", false);
+			} else {
+				FSM.SetBool ("aggroed", false);
+			}
+		}
+	}
+
+	void OnEnable(){
 		EventManager.StartListening ("DESTROY", ThreatDestroyed);
 	}
 
