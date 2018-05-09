@@ -6,12 +6,14 @@ public class Perception : AIComponent {
 	public float radius;
 	public Dictionary<GameObject,Vector3> percepts;
 
-	public void Start(){
+	override public void Start(){
 		base.Start ();
 		percepts = new Dictionary<GameObject,Vector3> ();
 	}
 
 	void Update(){
+		if (unitAI)
+			unitAI.WriteToBlackboard ("PERCEPTS", percepts);
 		if (FSM)
 			FSM.SetBool ("perceiving", (percepts.Count != 0));
 	}

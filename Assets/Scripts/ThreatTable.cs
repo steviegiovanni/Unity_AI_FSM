@@ -5,27 +5,25 @@ using UnityEngine;
 public class ThreatTable : AIComponent {
 	public Dictionary<GameObject, int> threats;
 
-	public void Start(){
+	override public void Start(){
 		base.Start ();
 		threats = new Dictionary<GameObject,int> ();
 	}
 
 	void Update(){
 		if (FSM) {
-			Perception perception = GetComponent<Perception> ();
-			if (perception) {
-				ProcessPercepts (perception.percepts);
-				GameObject highestThreat = GetHighestThreat ();
+			if (unitAI) {
+				Dictionary<GameObject,Vector3> percepts = unitAI.ReadFromBlackboard ("PERCEPTS") as Dictionary<GameObject, Vector3>;
+				if (percepts != null) {
+					ProcessPercepts (percepts);
+					GameObject highestThreat = GetHighestThreat ();
+					unitAI.WriteToBlackboard ("HIGHESTTHREAT", highestThreat);
 
-				if (highestThreat) {
-					BChasing chaseBehaviour = FSM.GetBehaviour<BChasing> ();
-					if (chaseBehaviour)
-						chaseBehaviour.target = highestThreat;
-					FSM.SetBool ("aggroed", true);
-				}else
-					FSM.SetBool ("aggroed", false);
-			} else {
-				FSM.SetBool ("aggroed", false);
+					if (highestThreat)
+						FSM.SetBool ("aggroed", true);
+					else
+						FSM.SetBool ("aggroed", false);
+				}
 			}
 		}
 	}
