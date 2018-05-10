@@ -22,9 +22,15 @@ public class BAttacking : StateMachineBehaviour {
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		if (attackComponent) {
 			if (unitAI) {
-				GameObject target = unitAI.ReadFromBlackboard ("HIGHESTHREAT") as GameObject;
-				if(target)
+				GameObject target = unitAI.ReadFromBlackboard ("HIGHESTTHREAT") as GameObject;
+				if (target) {
 					attackComponent.AttackTarget (target);
+				}else {
+					GameObject nearest = unitAI.ReadFromBlackboard ("NEARESTTHREAT") as GameObject;
+					if (nearest) {
+						attackComponent.AttackTarget (nearest);
+					}
+				}
 			}
 		}
 	}
