@@ -23,13 +23,12 @@ public class BAttacking : StateMachineBehaviour {
 		if (attackComponent) {
 			if (unitAI) {
 				GameObject target = unitAI.ReadFromBlackboard ("HIGHESTTHREAT") as GameObject;
-				if (target) {
+				if (target) 
 					attackComponent.AttackTarget (target);
-				}else {
-					GameObject nearest = unitAI.ReadFromBlackboard ("NEARESTTHREAT") as GameObject;
-					if (nearest) {
-						attackComponent.AttackTarget (nearest);
-					}
+				else {
+					target = unitAI.ReadFromBlackboard ("NEAREST") as GameObject;
+					if (target) 
+						attackComponent.AttackTarget (target);
 				}
 			}
 		}

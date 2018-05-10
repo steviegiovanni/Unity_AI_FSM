@@ -12,8 +12,24 @@ public class Perception : AIComponent {
 	}
 
 	void Update(){
-		if (unitAI)
+		if (unitAI) {
 			unitAI.WriteToBlackboard ("PERCEPTS", percepts);
+
+			// get the nearest object and write to blackboard
+			GameObject nearest = null;
+			float maxDistance = radius * radius;
+			foreach (GameObject key in percepts.Keys) {
+				if (key) {
+					float sqrDistance = Vector3.SqrMagnitude (key.transform.position - this.transform.position);
+					if (sqrDistance <= maxDistance) {
+						maxDistance = sqrDistance;
+						nearest =  key;
+					}
+				}
+			}
+			unitAI.WriteToBlackboard ("NEAREST", nearest);
+		}
+
 		if (FSM)
 			FSM.SetBool ("perceiving", (percepts.Count != 0));
 	}
@@ -59,22 +75,5 @@ public class Perception : AIComponent {
 		Vector3 pos;
 		if(percepts.TryGetValue(destroyedPercept, out pos))
 			percepts.Remove (destroyedPercept);
-	}
-
-	// return the nearest percept
-	public GameObject GetNearestPercept(){
-		GameObject nearest = null;
-		float maxDistance = 999.0f;
-		foreach (GameObject key in percepts.Keys) {
-			if (key) {
-				float sqrDistance = Vector3.SqrMagnitude (key.transform.position - this.transform.position);
-				if (sqrDistance <= maxDistance) {
-					maxDistance = sqrDistance;
-					nearest =  key;
-				}
-			}
-		}
-
-		return nearest;
 	}
 }

@@ -13,35 +13,15 @@ public class Attack : AIComponent {
 		
 	void Update(){
 		cooldownRemaining -= Time.deltaTime;
-		if (unitAI) {
+		if (unitAI && FSM) {
 			GameObject highestThreat = unitAI.ReadFromBlackboard ("HIGHESTTHREAT") as GameObject;
-			if (highestThreat) {
-				if (FSM)
-					FSM.SetBool ("inrange", (Vector2.SqrMagnitude (highestThreat.transform.position - this.transform.position) <= range * range));
-			} else{
-				Dictionary<GameObject,Vector3> percepts = unitAI.ReadFromBlackboard ("PERCEPTS") as Dictionary<GameObject, Vector3>;
-				if (percepts != null) {
-					GameObject nearest = null;
-					float maxDistance = 999.0f;
-					foreach (GameObject key in percepts.Keys) {
-						if (key) {
-							float sqrDistance = Vector3.SqrMagnitude (key.transform.position - this.transform.position);
-							if ((sqrDistance <= maxDistance) && (sqrDistance <= range*range)) {
-								maxDistance = sqrDistance;
-								nearest =  key;
-							}
-						}
-					}
-
-					unitAI.WriteToBlackboard ("NEARESTTHREAT", nearest);
-					if (FSM) {
-						if (nearest) 
-							FSM.SetBool ("inrange", true);
-						else 
-							FSM.SetBool ("inrange", false);
-					}
-				}
-			}
+			GameObject nearestThreat = unitAI.ReadFromBlackboard ("NEAREST") as GameObject;
+			if (highestThreat)
+				FSM.SetBool ("inrange", (Vector2.SqrMagnitude (highestThreat.transform.position - this.transform.position) <= range * range));
+			else if (nearestThreat) 
+				FSM.SetBool ("inrange", true);
+			else 
+				FSM.SetBool ("inrange", false);
 		}
 	}
 

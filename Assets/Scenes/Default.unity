@@ -1356,7 +1356,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitAI: {fileID: 0}
   FSM: {fileID: 0}
-  radius: 20
+  radius: 1
 --- !u!114 &1539287962
 MonoBehaviour:
   m_ObjectHideFlags: 0

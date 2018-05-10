@@ -12,9 +12,5 @@ public class Special : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (unitAI) {
-			if (unitAI.health < 50) 
-				unitAI.activeComponent = this.GetType();
-		}
 	}
 }
